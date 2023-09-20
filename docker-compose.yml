@@ -1,0 +1,9 @@
+version: '3'
+services:
+  pyspark-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      TZ: "Asia/Seoul"
+    command: ["sh", "-c", "spark-submit usr/drop-dup-jjw.py"]
