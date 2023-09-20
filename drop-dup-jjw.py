@@ -17,8 +17,8 @@ spark = SparkSession.builder.appName("drop-dup-test").getOrCreate() #.config(con
 spark.sparkContext.setSystemProperty("com.amazonaws.services.s3.enableV4", "true")
 
 # s3 data 불러오기 - 기준필요
-jp = spark.read.json("s3a://debugging-dragons-storage/jobs/jobplanet/cleaned/*.json")
-wt = spark.read.json("s3a://debugging-dragons-storage/jobs/wanted/cleaned/*.json")
+jp = spark.read.json("{YOUR_S3_PATH}")
+wt = spark.read.json("{YOUR_S3_PATH}")
 # org_df = spark.read.json("s3a://") # 중복제거 완료됐던 데이터
 
 
@@ -36,7 +36,7 @@ mid_df = mid_df.withColumn("row_id", monotonically_increasing_id())
 ## 4. write result_df to S3
 num_partitons = mid_df.count()
 result_df = mid_df.repartition(num_partitons)
-s3_output_path = "s3a://drop-duplication/drop_duplicate/jaewon-test/" # 경로 변경 필요
+s3_output_path = "{YOUR_S3_PATH}" # 경로 변경 필요
 result_df.write.json(s3_output_path, mode="overwrite") # 각 행을 하나의 json파일로 따로 저장
 
 
